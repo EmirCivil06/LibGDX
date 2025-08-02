@@ -6,4 +6,6 @@
   - Yüksek skor sistemi ve farklı birçok özellik bulunmaktadır.
 ---
 ## 🚀 Oyunu Nasıl Oynayabiliriz?
+---
+- Oyunun Jar dosyası hali **out/artifacts/**
     
