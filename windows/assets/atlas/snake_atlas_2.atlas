@@ -1,0 +1,5 @@
+snake_atlas_2.png
+size:2048,512
+repeat:none
+snake_sprite_sheet
+bounds:2,2,1024,348

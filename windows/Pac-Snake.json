@@ -1,0 +1,11 @@
+{
+  "jrePath": "jre",
+  "classPath": [
+    "packr.jar"
+  ],
+  "mainClass": "io.github.libGDX_Project1.lwjgl3",
+  "useZgcIfSupportedOs": false,
+  "vmArgs": [
+    "-Xmx1G"
+  ]
+}

@@ -1,0 +1,15 @@
+ball.png
+size:1024,256
+repeat:none
+particle-ball
+index:2
+bounds:2,2,128,128
+particle-ball
+index:1
+bounds:132,2,128,128
+particle-ball
+index:3
+bounds:262,2,128,128
+particle-ball
+index:0
+bounds:392,2,128,128

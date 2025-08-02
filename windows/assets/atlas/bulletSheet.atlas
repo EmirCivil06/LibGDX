@@ -1,0 +1,9 @@
+bulletSheet.png
+size:64,32
+repeat:none
+bullet
+index:0
+bounds:2,2,14,16
+bullet
+index:1
+bounds:18,2,14,16
