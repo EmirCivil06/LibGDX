@@ -5,5 +5,5 @@
   - Birçok ses efekti ve ana müzik,
   - Yüksek skor sistemi ve farklı birçok özellik bulunmaktadır.
 ---
-## Oyunu Nasıl Oynayabiliriz?
+## 🚀 Oyunu Nasıl Oynayabiliriz?
     
