@@ -7,5 +7,6 @@
 ---
 ## 🚀 Oyunu Nasıl Oynayabiliriz?
 ---
-- Oyunun Jar dosyası hali **out/artifacts/**
+- Oyunun Jar dosyası hali **out/artifacts/LibGDX_jar** klasörü içerisinde bulabilirsiniz.
+> ⚠️ Jar dosyasını başarılı bir şekilde çalıştırabilmek için bir JDK gerekli olabilir. 
     
