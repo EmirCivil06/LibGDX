@@ -1,0 +1,15 @@
+items_2.png
+size:2048,512
+repeat:none
+texture_dead_lying
+bounds:644,93,73,35
+texture_dead_standing
+bounds:1265,349,52,48
+texture_grass_background
+bounds:2,77,640,320
+texture_interface
+bounds:644,130,619,267
+texture_shadow
+bounds:2,52,126,23
+texture_snake_idle
+bounds:2,2,52,48

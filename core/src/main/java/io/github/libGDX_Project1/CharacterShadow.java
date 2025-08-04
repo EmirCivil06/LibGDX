@@ -1,15 +1,13 @@
 package io.github.libGDX_Project1;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 public class CharacterShadow {
-    protected Texture texture;
     protected Sprite sprite;
 
     CharacterShadow(){
-        texture = Assets.MANAGER.get(Assets.SHADOW, Texture.class);
-        sprite = new Sprite(texture);
+        sprite = new Sprite(Assets.MANAGER.get(Assets.ITEMS_2, TextureAtlas.class).findRegion("texture_shadow"));
     }
 
     public void init(float characterWidth, float characterHeight, float characterAlpha){

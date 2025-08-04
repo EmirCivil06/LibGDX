@@ -45,7 +45,7 @@ public class InfoScreen extends InputAdapter implements Screen {
         font1 = generator.generateFont(param1);
         generator.dispose();
 
-        infoTable = new Sprite(Assets.MANAGER.get(Assets.INTERFACE, Texture.class));
+        infoTable = new Sprite(Assets.MANAGER.get(Assets.ITEMS_2, TextureAtlas.class).findRegion("texture_interface"));
         batch = new SpriteBatch();
     }
 

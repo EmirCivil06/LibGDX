@@ -25,7 +25,6 @@ public class MainMenuScreen extends InputAdapter implements Screen {
     private final TextureRegion goldApple;
     private final BitmapFont font_1;
     private final BitmapFont font_2;
-    private final BitmapFont font_3;
     private final GlyphLayout layout_1 = new GlyphLayout();
     private final GlyphLayout layout_2 = new GlyphLayout();
     private final Sound Beggining;
@@ -54,9 +53,8 @@ public class MainMenuScreen extends InputAdapter implements Screen {
         param3.shadowOffsetX = 2;
         param3.shadowOffsetY = 2;
         font_1 = generator.generateFont(param1);
-        font_2 = generator.generateFont(param2);
-        font_3 = fontGenerator.generateFont(param3);
-        font_3.getData().setScale(0.75f);
+        font_2 = fontGenerator.generateFont(param3);
+        font_2.getData().setScale(0.75f);
         generator.dispose();
 
         Beggining.play(0.55f);
@@ -102,15 +100,15 @@ public class MainMenuScreen extends InputAdapter implements Screen {
         MainGame.background.draw(MainGame.batch);
 
         layout_1.setText(font_1, "PAC-SNAKE");
-        layout_2.setText(font_2, "Baslamak icin SPACE'e basin!");
+        layout_2.setText(MainGame.pixeloid, "Başlamak için SPACE'e basın!");
         float x_1 = (MainGame.viewport.getWorldWidth() - layout_1.width) / 2;
         float x_2 = (MainGame.viewport.getWorldWidth() - layout_2.width) / 2;
 
         font_1.draw(MainGame.batch, "PAC-SNAKE", x_1, 220);
         MainGame.batch.draw(goldApple, x_1 - 30, 200, 25, 25);
         MainGame.batch.draw(goldApple, x_1 + layout_1.width + 5, 200, 25, 25);
-        font_2.draw(MainGame.batch, "Baslamak icin SPACE'e basin!", x_2, 110);
-        font_3.draw(MainGame.batch, "Credits", 455, 15);
+        MainGame.pixeloid.draw(MainGame.batch, "Başlamak için SPACE'e basın!", x_2, 110);
+        font_2.draw(MainGame.batch, "Credits", 455, 15);
         MainGame.batch.end();
 
         // Giriş yapma kontrolü ve sahne geçişi
@@ -130,8 +128,8 @@ public class MainMenuScreen extends InputAdapter implements Screen {
                 Beggining.stop();
                 MainGame.setScreen(new Credits(MainGame));
             }
-                font_3.setColor(Color.YELLOW);
-        } else font_3.setColor(Color.WHITE);
+                font_2.setColor(Color.YELLOW);
+        } else font_2.setColor(Color.WHITE);
 
         stage.act(delta);
         stage.draw();

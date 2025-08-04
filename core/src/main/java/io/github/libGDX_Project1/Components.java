@@ -6,6 +6,8 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 
@@ -14,14 +16,14 @@ public class Components {
     protected BitmapFont font_1, font_2;
     protected BitmapFont font, headerFont, infoFont;
     protected Sound startingSound, gameOverSound, weakness, destruction;
-    protected static Music MainMusic;
+    public static Music MainMusic;
     protected ParticleEffect healing;
     protected static int score = 0;
     protected static float timer = 7;
     protected float sceneryChangingControl = 0;
     protected float TableTimer;
-    protected static Sound hiss, eating, lifeUp, successfullyAte, damageSound;
-    protected Label highScore;
+    protected Sound damageSound, successfullyAte, lifeUp;
+    protected Label highScore, scoreDisplay, newHighScore;
 
     public Components(){
         batch =  new SpriteBatch();
@@ -29,8 +31,10 @@ public class Components {
         healing.load(Gdx.files.internal("particles/healing_particles.p"), Gdx.files.internal("particles/"));
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Pixelon.ttf"));
+        FreeTypeFontGenerator generator1 = new FreeTypeFontGenerator(Gdx.files.internal("Chirp-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter_one = new FreeTypeFontGenerator.FreeTypeFontParameter();
         FreeTypeFontGenerator.FreeTypeFontParameter parameter_two = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter_three = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter_two.size = 15;
         parameter_one.size = 25;
         font_1 = new BitmapFont();
@@ -47,8 +51,14 @@ public class Components {
         infoFont = generator.generateFont(parameter_two);
         generator.dispose();
 
-        font = new BitmapFont();
+        parameter_three.size = 15;
+        parameter_three.shadowOffsetY = 1;
+        parameter_three.shadowOffsetX = 1;
+        parameter_three.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "Üü";
+
+        font = generator1.generateFont(parameter_three);
         font.getData().setScale(0.9f);
+        generator1.dispose();
 
         startingSound = Assets.MANAGER.get(Assets.STARTINGSOUND, Sound.class);
         gameOverSound = Assets.MANAGER.get(Assets.GAMEOVERSOUND, Sound.class);
@@ -57,17 +67,27 @@ public class Components {
         MainMusic = Assets.MANAGER.get(Assets.MUSIC, Music.class);
         MainMusic.setLooping(true);
         MainMusic.setVolume(0.80f);
-        hiss = Assets.MANAGER.get(Assets.HISS, Sound.class);
-        eating = Assets.MANAGER.get(Assets.EATING, Sound.class);
         lifeUp = Assets.MANAGER.get(Assets.LIFE_UP, Sound.class);
         successfullyAte = Assets.MANAGER.get(Assets.SUCCESFULLYATE, Sound.class);
         damageSound = Assets.MANAGER.get(Assets.DAMAGESOUND, Sound.class);
 
         Label.LabelStyle style = new Label.LabelStyle(font, Color.YELLOW);
-        highScore = new Label("Yuksek Skor: ",style);
-        highScore.setSize(200, 200);
+        Label.LabelStyle style1 = new Label.LabelStyle(font, Color.WHITE);
+
+        highScore = new Label("Yüksek Skor: ",style);
+        highScore.setSize(300, 300);
         highScore.setFontScale(2f);
-        highScore.setPosition(30, 375);
+        highScore.setPosition(30, 415);
+
+        scoreDisplay = new Label("Skor: ",style1);
+        scoreDisplay.setSize(300, 300);
+        scoreDisplay.setFontScale(2f);
+        scoreDisplay.setPosition(30, 455);
+
+        newHighScore = new Label("Yeni Yüksek Skor!", style);
+        newHighScore.setSize(300, 300);
+        newHighScore.setPosition((float) (Gdx.graphics.getWidth()) / 2, 900);
+        newHighScore.setFontScale(2f);
     }
 
 
@@ -100,10 +120,9 @@ public class Components {
         }
     }
 
-    public void setInfoTable(SpriteBatch batch, Snake snake, float delta, TextureRegion texture, String SCORE){
+    public void setInfoTable(SpriteBatch batch, Snake snake, float delta, TextureRegion texture){
         font.draw(batch, "Yenen Elmalar: " + snake.applesEaten, 10, 240);
         font.draw(batch, "Kalan Can: " + snake.health + " x", 382.5f, 240);
-        font.draw(batch, "Skor : " + SCORE, 10, 220);
         batch.draw(texture, 472.5f, 227, 15, 15);
         if (snake.health == 4 || snake.health == 5 || snake.health == 6) {
             TableTimer += delta;
@@ -113,11 +132,28 @@ public class Components {
         }
     }
 
-    public void changeScenery(float delta, Main MainGame, Snake snake, GameScreen screen){
+    public void changeScenery(float delta, Main MainGame, Snake snake, GameScreen screen, Image blackSlide){
         sceneryChangingControl += delta;
         if (sceneryChangingControl > snake.D_INTERVAL + 1.25f) {
-            MainGame.setScreen(new GameOverScreen(MainGame));
-            screen.dispose();
+            blackSlide.addAction(Actions.sequence(
+                Actions.moveTo(0, 0),
+                Actions.fadeIn(0.6f),
+                Actions.run(() -> Components.MainMusic.stop()),
+                Actions.run(() -> MainGame.setScreen(new GameOverScreen(MainGame))),
+                Actions.run(screen::dispose)
+            ));
         }
+    }
+
+    public void disposeElements() {
+        font_2.dispose();
+        font_1.dispose();
+        headerFont.dispose();
+        infoFont.dispose();
+        font.dispose();
+        startingSound.dispose();
+        damageSound.dispose();
+        successfullyAte.dispose();
+        lifeUp.dispose();
     }
 }

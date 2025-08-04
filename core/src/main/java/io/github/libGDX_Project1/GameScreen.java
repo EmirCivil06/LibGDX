@@ -14,10 +14,14 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.Timer;
 
 public class GameScreen extends InputAdapter implements Screen {
 
@@ -26,7 +30,6 @@ public class GameScreen extends InputAdapter implements Screen {
     private final Apple Apple;
     Array<Bullet> bullets = new Array<>();
     private final JellyBeans jellyBeans;
-    protected Texture background;
     protected TextureRegion heart;
     protected Sprite shieldIcon;
 
@@ -36,20 +39,19 @@ public class GameScreen extends InputAdapter implements Screen {
     private float Timer_Inv;
     private float TIMER;
     private float Timer_Healing;
-    private boolean bulletFired = false, wasEating = false;
+    private boolean bulletFired = false, wasEating = false, highScored = false;
 
     private final Components components;
     private Stage stage;
     protected Image blackSlide;
     private final Ghost yellow, red, blue, pink;
-    protected static int highScore = 0;
+    private final Container<Label> container;
 
     public GameScreen(Main mainGame){
         this.MainGame = mainGame;
         Apple = new Apple();
         snake = new Snake();
         jellyBeans = new JellyBeans();
-        background = Assets.MANAGER.get(Assets.BACKGROUND, Texture.class);
         heart = Assets.MANAGER.get(Assets.ITEMS, TextureAtlas.class).findRegion("texture_heart");
         shieldIcon = new Sprite(Assets.MANAGER.get(Assets.ITEMS, TextureAtlas.class).findRegion("texture_shield"));
 
@@ -61,6 +63,12 @@ public class GameScreen extends InputAdapter implements Screen {
 
         MainGame.preferences.putBoolean(MainGame.BooleanKey, true);
         MainGame.preferences.flush();
+
+        container = new Container<>(components.newHighScore);
+        container.size(components.newHighScore.getPrefWidth(), components.newHighScore.getPrefHeight());
+        container.setPosition(components.newHighScore.getX(), components.newHighScore.getY(), Align.center);
+        container.setOrigin(container.getWidth() / 2, container.getHeight() / 2);
+        container.setTransform(true);
     }
 
     @Override
@@ -77,11 +85,15 @@ public class GameScreen extends InputAdapter implements Screen {
         blackSlide = new Image(new TextureRegionDrawable(new TextureRegion(blackTexture)));
         blackSlide.setSize(Gdx.graphics.getWidth() * 1.5f, Gdx.graphics.getHeight());
         blackSlide.setPosition(0, 0);
-        blackSlide.addAction(Actions.moveTo(-Gdx.graphics.getWidth() * 1.5f, 0, 0.6f));// sağdan başlasın
+        blackSlide.addAction(Actions.sequence(
+            Actions.moveTo(-Gdx.graphics.getWidth() * 1.5f, 0, 0.6f),
+            Actions.delay(0.4f),
+            Actions.fadeOut(0.5f)
+        ));// sağdan başlasın
+        stage.addActor(container);
         stage.addActor(components.highScore);
+        stage.addActor(components.scoreDisplay);
         stage.addActor(blackSlide);
-
-        Gdx.input.setInputProcessor(stage); // inputlar sahneye yönlendirilir
     }
 
     @Override
@@ -89,9 +101,10 @@ public class GameScreen extends InputAdapter implements Screen {
         if (!snake.isDying) snake.SNAKE_EVENT_SETTER_INPUT(187.5f, delta, components);
         draw(delta);
         logic(delta);
-        components.highScore.setText("Yuksek Skor: " + MainGame.preferences.getInteger(MainGame.IntegerKey));
+        components.highScore.setText("Yüksek Skor: " + MainGame.preferences.getInteger(MainGame.IntegerKey));
         stage.act(delta);
         stage.draw();
+
     }
 
     private void draw(float delta){
@@ -104,6 +117,7 @@ public class GameScreen extends InputAdapter implements Screen {
         boolean isEating = Gdx.input.isKeyPressed(Input.Keys.ENTER);
         String SCORE = String.format("%09d", Components.score);
         String TIME = String.format("%.1f", Components.timer);
+        components.scoreDisplay.setText("Skor: " + SCORE);
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
@@ -125,7 +139,7 @@ public class GameScreen extends InputAdapter implements Screen {
             if (bullet.hitbox.overlaps(snake.hitbox) || (yellow.Overlaps(snake) || red.Overlaps(snake) || blue.Overlaps(snake) || pink.Overlaps(snake))) {
                 // Çarpışma işlemleri
                 if (!snake.damaged && !snake.invincible) {
-                    Components.damageSound.play(0.5f, pitch, 0);
+                    components.damageSound.play(0.5f, pitch, 0);
                     snake.damaged = true;
                     Timer_Inv = 0;
                     snake.health--;
@@ -183,7 +197,7 @@ public class GameScreen extends InputAdapter implements Screen {
         // ---------------------------------------------------------------------------------------------------------------
         // ---------------------------------------------------------------------------------------------------------------
 
-        components.setInfoTable(MainGame.batch, snake, delta, heart, SCORE);
+        components.setInfoTable(MainGame.batch, snake, delta, heart);
 
     // ------------------------------PARÇACIK EFEKTİ ÇİZİMİ-----------------------------------
         if (snake.ATE_BEANS || snake.ATE_5) {
@@ -235,6 +249,19 @@ public class GameScreen extends InputAdapter implements Screen {
         snake.SNAKE_EVENT_SETTER_CLAMP(worldWidth, worldHeight);
 
         if (Components.score > MainGame.preferences.getInteger(MainGame.IntegerKey)) {
+            if (!highScored) {
+                container.addAction(Actions.sequence(
+                    Actions.moveTo(container.getX(), 650, 0.6f),
+                    Actions.delay(0.3f),
+                    Actions.scaleTo(1.25f, 1.25f, 0.15f),
+                    Actions.scaleTo(1f, 1f, 0.35f),
+                    Actions.delay(1.2f),
+                    Actions.moveTo(container.getX(), 1000, 0.6f)
+                    ));
+                highScored = true;
+            }
+            components.scoreDisplay.setColor(Color.YELLOW);
+            components.highScore.addAction(Actions.moveTo(-350, components.highScore.getY(), 1f));
             MainGame.preferences.putInteger(MainGame.IntegerKey, Components.score);
             MainGame.preferences.flush();
         }
@@ -260,12 +287,12 @@ public class GameScreen extends InputAdapter implements Screen {
             snake.applesEaten++;
             snake.ATE_APPLE = true;
             if (snake.applesEaten % 10 == 0) {
-                Components.successfullyAte.play(0.75f);
+                components.successfullyAte.play(0.75f);
             }
 
             if (snake.applesEaten % 5 == 0 && snake.health < 6) {
                 snake.health++;
-                Components.lifeUp.play(0.2f);
+                components.lifeUp.play(0.2f);
                 components.TableTimer = 0;
                 snake.ATE_5 = true;
             }
@@ -332,7 +359,7 @@ public class GameScreen extends InputAdapter implements Screen {
                 components.gameOverSound.play(0.5f);
                 snake.isDying = true;      // <-- Yılan ölmeye başlasın
             }
-            components.changeScenery(delta, MainGame, snake, this);
+            components.changeScenery(delta, MainGame, snake, this, blackSlide);
         } else {
             snake.SNAKE_EVENT_SETTER_SOUND(randomPitch, Apple, jellyBeans, Delta_E, isEating);
         }
@@ -370,14 +397,8 @@ public class GameScreen extends InputAdapter implements Screen {
         for (Bullet bullet: bullets){
             bullet.bounce.dispose();
         }
-        components.startingSound.dispose();
-        Components.damageSound.dispose();
-        Components.eating.dispose();
-        Components.hiss.dispose();
-        Components.lifeUp.dispose();
-        Components.successfullyAte.dispose();
-        components.font.dispose();
         Components.MainMusic.dispose();
+        components.disposeElements();
+        snake.dispose();
     }
-
 }

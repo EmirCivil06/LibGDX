@@ -2,15 +2,15 @@ package io.github.libGDX_Project1;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Snake {
     protected Sprite Idle, Moving, rightFacedEating, leftFacedEating, dead_0, dead_1;
-    protected TextureAtlas movingAtlas, rightFacedEatingAtlas, leftFacedEatingAtlas;
+    protected TextureAtlas entireAtlas;
     protected Animation<TextureRegion> movingAnim, rightFacedEatingAnim, leftFacedEatingAnim;
     protected Rectangle hitbox = new Rectangle();
     protected int health = 3;
@@ -29,24 +29,24 @@ public class Snake {
     private boolean healingEffectActive= false;
     private float DeathTimer, COOLDOWN = 0;
     private static final float COUNTDOWN = 0.5f;
+    protected Sound eating, hiss;
 
     public Snake(){
         shadow = new CharacterShadow();
 
-        Idle = new Sprite(Assets.MANAGER.get(Assets.IDLETEXTURE, Texture.class));
+        Idle = new Sprite(Assets.MANAGER.get(Assets.ITEMS_2, TextureAtlas.class).findRegion("texture_snake_idle"));
         Idle.setSize(25, 25);
         Idle.setPosition(25, 25);
 
-        movingAtlas = Assets.MANAGER.get(Assets.MOVING_ATLAS, TextureAtlas.class);
-        movingAnim = new Animation<>(0.085f, movingAtlas.findRegions("snake"));
+        entireAtlas = Assets.MANAGER.get(Assets.SNAKE_ANIMATON_KEYFRAMES, TextureAtlas.class);
+
+        movingAnim = new Animation<>(0.085f, entireAtlas.findRegions("mov"));
         movingAnim.setPlayMode(Animation.PlayMode.LOOP);
 
-        rightFacedEatingAtlas = Assets.MANAGER.get(Assets.EATING_ATLAS_R, TextureAtlas.class);
-        rightFacedEatingAnim = new Animation<>(0.09f, rightFacedEatingAtlas.findRegions("eating"));
+        rightFacedEatingAnim = new Animation<>(0.085f, entireAtlas.findRegions("eating"));
         rightFacedEatingAnim.setPlayMode(Animation.PlayMode.LOOP);
 
-        leftFacedEatingAtlas = Assets.MANAGER.get(Assets.EATING_ATLAS_L, TextureAtlas.class);
-        leftFacedEatingAnim = new Animation<>(0.09f, leftFacedEatingAtlas.findRegions("eating"));
+        leftFacedEatingAnim = new Animation<>(0.085f, entireAtlas.findRegions("eatingl"));
         leftFacedEatingAnim.setPlayMode(Animation.PlayMode.LOOP);
 
         Moving = new Sprite(movingAnim.getKeyFrame(0));
@@ -61,11 +61,14 @@ public class Snake {
         leftFacedEating.setSize(25, 25);
         leftFacedEating.setPosition(25, 25);
 
-        dead_0 = new Sprite(Assets.MANAGER.get(Assets.DEAD_0, Texture.class));
+        dead_0 = new Sprite(Assets.MANAGER.get(Assets.ITEMS_2, TextureAtlas.class).findRegion("texture_dead_standing"));
         dead_0.setSize(25, 25);
-        dead_1 = new Sprite(Assets.MANAGER.get(Assets.DEAD_1, Texture.class));
+        dead_1 = new Sprite(Assets.MANAGER.get(Assets.ITEMS_2, TextureAtlas.class).findRegion("texture_dead_lying"));
         dead_1.setSize(38.001f, 18.22f);
         originalColor = new Color(Idle.getColor());
+
+        eating = Assets.MANAGER.get(Assets.EATING, Sound.class);
+        hiss = Assets.MANAGER.get(Assets.HISS, Sound.class);
     }
 
     public boolean SNAKE_EVENT_SETTER_DAMAGED(float timer){
@@ -201,7 +204,7 @@ public class Snake {
         COOLDOWN -= Gdx.graphics.getDeltaTime();
         final float INTERVAL = 9f;
         if (HissDelay >= INTERVAL) {
-            Components.hiss.play(1.0f, randomPitch, 0);
+            hiss.play(1.0f, randomPitch, 0);
             HissDelay = 0;
         }
 
@@ -213,7 +216,7 @@ public class Snake {
         }
 
         if (eaten && COOLDOWN <= 0f) {
-            Components.eating.play(0.25f, randomPitch, 0);
+            eating.play(0.25f, randomPitch, 0);
             COOLDOWN = COUNTDOWN;
         }
     }
@@ -238,5 +241,10 @@ public class Snake {
                 dead_1.draw(batch);
             } else shadow.sprite.setAlpha(Idle.getColor().a * 0.4f);
         }
+    }
+
+    public void dispose() {
+        hiss.dispose();
+        eating.dispose();
     }
 }
