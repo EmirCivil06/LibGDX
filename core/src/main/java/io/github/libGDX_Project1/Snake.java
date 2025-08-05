@@ -13,7 +13,7 @@ public class Snake {
     protected TextureAtlas entireAtlas;
     protected Animation<TextureRegion> movingAnim, rightFacedEatingAnim, leftFacedEatingAnim;
     protected Rectangle hitbox = new Rectangle();
-    protected int health = 3;
+    protected int health = 5;
     protected int applesEaten = 0;
     protected float HissDelay, Alpha_Healing = 0f;
     protected boolean fadingIn = true;
@@ -29,7 +29,7 @@ public class Snake {
     private boolean healingEffectActive= false;
     private float DeathTimer, COOLDOWN = 0;
     private static final float COUNTDOWN = 0.5f;
-    protected Sound eating, hiss;
+    protected Sound eating, hiss, secret;
 
     public Snake(){
         shadow = new CharacterShadow();
@@ -69,6 +69,7 @@ public class Snake {
 
         eating = Assets.MANAGER.get(Assets.EATING, Sound.class);
         hiss = Assets.MANAGER.get(Assets.HISS, Sound.class);
+        secret = Assets.MANAGER.get(Assets.SECRETSOUND, Sound.class);
     }
 
     public boolean SNAKE_EVENT_SETTER_DAMAGED(float timer){
@@ -123,10 +124,10 @@ public class Snake {
             rightFacedEating.setPosition(Idle.getX(), Idle.getY());
             leftFacedEating.setPosition(Idle.getX(), Idle.getY());
         }
-        float hitboxWidth = Idle.getWidth() * 0.6f;
+        float hitboxWidth = Idle.getWidth() * 0.5f;
         float hitboxHeight = Idle.getHeight() * 0.6f;
-        float hitbox_X = Idle.getX() + (Idle.getWidth() - hitboxWidth) / 2f;
-        float hitbox_Y = Idle.getY() + (Idle.getHeight() - hitboxHeight) / 2f;
+        float hitbox_X = Idle.getX() + (Idle.getWidth() - hitboxWidth) / 1.75f;
+        float hitbox_Y = Idle.getY() + ((Idle.getHeight() - hitboxHeight) / 2f) - 1f;
         hitbox.set(hitbox_X, hitbox_Y, hitboxWidth, hitboxHeight);
         comp.healing.setPosition(Idle.getX() + Idle.getWidth() / 2, Idle.getY());
 
@@ -211,6 +212,7 @@ public class Snake {
         boolean eaten = false;
         if ((rightFacedEatingAnim.getKeyFrameIndex(Delta) == 3 || leftFacedEatingAnim.getKeyFrameIndex(Delta) == 3) && isEating) {
             if (hitbox.overlaps(Apple.hitbox) || (hitbox.overlaps(jellyBeans.hitbox) && !invincible)){
+                if (hitbox.overlaps(jellyBeans.hitbox) && MathUtils.random(1, 100) == 1) secret.play(0.5f);
                 eaten = true;
             }
         }

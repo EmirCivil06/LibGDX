@@ -21,7 +21,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.Timer;
 
 public class GameScreen extends InputAdapter implements Screen {
 
@@ -136,15 +135,10 @@ public class GameScreen extends InputAdapter implements Screen {
         // -------------------BULLET AKTİVASYONU, ÇİZİMİ VE MANTIĞI-----------------------------
         for (Bullet bullet : bullets) {
             bullet.ActivateLogic(MainGame.viewport.getWorldWidth(), MainGame.viewport.getWorldHeight());
-            if (bullet.hitbox.overlaps(snake.hitbox) || (yellow.Overlaps(snake) || red.Overlaps(snake) || blue.Overlaps(snake) || pink.Overlaps(snake))) {
+            if (bullet.hitbox.overlaps(snake.hitbox)) {
                 // Çarpışma işlemleri
-                if (!snake.damaged && !snake.invincible) {
-                    components.damageSound.play(0.5f, pitch, 0);
-                    snake.damaged = true;
-                    Timer_Inv = 0;
-                    snake.health--;
-                    if (Components.score > 0) Components.score -= 100;
-                }
+                damageCharacter(pitch);
+
                 if (snake.invincible){
                     bullet.sprite.setAlpha(0);
                     if (bullet.Timer_Self > bullet.INTERVAL) {
@@ -158,6 +152,10 @@ public class GameScreen extends InputAdapter implements Screen {
         components.BULLET_ARRAY_EVENT_SETTER_DRAW(MainGame.batch, bullets, snake);
         // ----------------------------------------------------------------------------------------------------------------------
         // ----------------------------------------------------------------------------------------------------------------------
+
+        if ((yellow.Overlaps(snake) || red.Overlaps(snake) || blue.Overlaps(snake) || pink.Overlaps(snake))) {
+            damageCharacter(pitch);
+        }
 
         // ----------------------------------------------------------------------------------------------------------------------
         // -------------------------EATING VE DYING KONTROLÜ---------------------------------------------------------------------
@@ -212,7 +210,7 @@ public class GameScreen extends InputAdapter implements Screen {
     // --------------------------------------HAYALET DÜŞMANLARIN ÇİZİMİ VE MANTIĞI-----------------------------------------
     //  Bütün bu hayalet düşmanlar için yeni bir Array tanımlamak istemedim. Zaten 8 adet maksimum olacak şekilde ayarladım
         if (!snake.isDying) {
-            if (snake.applesEaten >= 40) {
+            if (snake.applesEaten >= 10) {
                 yellow.draw(delta, MainGame.batch);
                 yellow.logic(delta, MainGame.viewport.getWorldWidth(), MainGame.viewport.getWorldHeight());
                 yellow.update(delta);
@@ -290,7 +288,7 @@ public class GameScreen extends InputAdapter implements Screen {
                 components.successfullyAte.play(0.75f);
             }
 
-            if (snake.applesEaten % 5 == 0 && snake.health < 6) {
+            if (snake.applesEaten % 5 == 0 && snake.health < 8) {
                 snake.health++;
                 components.lifeUp.play(0.2f);
                 components.TableTimer = 0;
@@ -315,7 +313,7 @@ public class GameScreen extends InputAdapter implements Screen {
             final float INTERVAL = 7f;
             TIMER += delta;
 
-            if (!snake.healed_by_BEAN && snake.health < 6) {
+            if (!snake.healed_by_BEAN && snake.health < 8) {
                 snake.health++;
                 snake.healed_by_BEAN = true;
             }
@@ -379,6 +377,16 @@ public class GameScreen extends InputAdapter implements Screen {
         // ----------------------------------------------------------------------------------------
 
         if (snake.applesEaten == 1) Components.MainMusic.play();
+    }
+
+    public void damageCharacter(float soundPitch) {
+        if (!snake.damaged && !snake.invincible) {
+            components.damageSound.play(0.5f, soundPitch, 0);
+            snake.damaged = true;
+            Timer_Inv = 0;
+            snake.health--;
+            if (Components.score > 0) Components.score -= 100;
+        }
     }
 
     @Override

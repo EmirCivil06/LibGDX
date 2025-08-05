@@ -12,10 +12,10 @@ public class Bullet  {
     protected Sprite sprite;
     protected Sound bounce;
     protected Rectangle hitbox;
-    protected float starting_X;
+    protected float starting_X, boundingX, boundingY, boundingWidth, boundingHeight;
     protected float starting_Y = 237;
     protected float stateTime, Timer_Self = 0;
-    protected final float INTERVAL = 0.08f;
+    protected final float INTERVAL = 0.0755f;
     protected ParticleEffect effect_self, effect_trail_0, effect_trail_1;
     protected CharacterShadow shadow;
 
@@ -59,7 +59,7 @@ public class Bullet  {
         bounce = Assets.MANAGER.get(Assets.BOUNCE, Sound.class);
         shadow = new CharacterShadow();
 
-        hitbox = new Rectangle(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
+        hitbox = new Rectangle();
     }
 
     public void ActivateLogic(float worldWidth, float worldHeight){
@@ -106,7 +106,11 @@ public class Bullet  {
     }
 
     public void changeSpeed(){
-        hitbox.set(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
+        boundingX = sprite.getX() - 3.5f;
+        boundingY = sprite.getY() - 3.5f;
+        boundingWidth = sprite.getWidth() * 0.8f;
+        boundingHeight = sprite.getHeight() * 0.8f;
+        hitbox.set(boundingX, boundingY, boundingWidth, boundingHeight);
         effect_self.setPosition(sprite.getX() + sprite.getWidth() / 2f, sprite.getY() + sprite.getHeight() / 2f);
         effect_trail_0.setPosition(sprite.getX() + sprite.getWidth() / 2f, sprite.getY() + sprite.getHeight() / 2f);
         effect_trail_1.setPosition(sprite.getX() + sprite.getWidth() / 2f, sprite.getY() + sprite.getHeight() / 2f);

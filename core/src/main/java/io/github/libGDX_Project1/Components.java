@@ -124,7 +124,7 @@ public class Components {
         font.draw(batch, "Yenen Elmalar: " + snake.applesEaten, 10, 240);
         font.draw(batch, "Kalan Can: " + snake.health + " x", 382.5f, 240);
         batch.draw(texture, 472.5f, 227, 15, 15);
-        if (snake.health == 4 || snake.health == 5 || snake.health == 6) {
+        if (snake.health == 6 || snake.health == 7 || snake.health == 8) {
             TableTimer += delta;
             if (TableTimer < 1.35f) {
                 font.draw(batch, "EKSTRA CAN!", 382.5f, 225);

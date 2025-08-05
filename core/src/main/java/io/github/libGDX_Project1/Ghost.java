@@ -17,7 +17,7 @@ public class Ghost implements Pool.Poolable {
     protected boolean isDown = true, needsToBeDrawn = true;
     protected Rectangle hitbox = new Rectangle();
     private float soundCountdown = 0;
-    private final float soundCooldown = 2.40f;
+    public final float soundCooldown = 2.8f;
     private final Sound sound;
     protected GhostType type;
 
@@ -51,7 +51,7 @@ public class Ghost implements Pool.Poolable {
         particle = new ParticleEffect();
         particle.load(Gdx.files.internal("particles/" + particleFileName + ".p"), Gdx.files.internal("particles"));
         warn = new ParticleEffect();
-        warn.load(Gdx.files.internal("particles/exclamationMark.p"), Gdx.files.internal("particles"));
+        warn.load(Gdx.files.internal("particles/warning.p"), Gdx.files.internal("particles"));
 
         Array<TextureAtlas.AtlasRegion> frames = atlas.findRegions(regionName);
         if (frames == null || frames.size == 0) {
@@ -84,19 +84,19 @@ public class Ghost implements Pool.Poolable {
     public void logic(float delta, float worldWidth, float worldHeight){
         soundCountdown -= delta;
         if (isDown){
-            ghost.translateY(delta * 300f);
+            ghost.translateY(delta * 275f);
             if (soundCountdown <= 0){
-                sound.play(0.2f);
+                sound.play(0.3f);
                 soundCountdown = soundCooldown;
             }
         }
 
-        isDown = !(ghost.getY() >= worldHeight + ghost.getHeight() + 250);
+        isDown = !(ghost.getY() >= worldHeight + ghost.getHeight() + 300);
         if (!isDown) {
             float randomX = MathUtils.random(0, worldWidth - ghost.getWidth());
             ghost.setPosition(randomX, -200);
         }
-        needsToBeDrawn = ghost.getY() + ghost.getHeight() <= worldHeight && isDown;
+        needsToBeDrawn = ghost.getY() + ghost.getHeight() <= worldHeight - 200 && isDown;
     }
 
     public void draw(float delta, SpriteBatch batch){
@@ -104,7 +104,7 @@ public class Ghost implements Pool.Poolable {
         TextureRegion region = animation.getKeyFrame(DELTA, true);
         ghost.setRegion(region);
         particle.draw(batch);
-        warn.setPosition(ghost.getX() + ghost.getWidth() / 2, 10);
+        warn.setPosition(ghost.getX() + ghost.getWidth() / 2, 12);
         if (needsToBeDrawn) warn.draw(batch);
         else warn.reset();
         ghost.draw(batch);

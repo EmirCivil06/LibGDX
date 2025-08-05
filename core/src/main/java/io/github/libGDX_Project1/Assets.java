@@ -29,7 +29,8 @@ public class Assets {
     public static final String HEALING = "audio/heal.mp3";
     // Ghost.java
     public static final String GHOSTS = "atlas/ghosts.atlas";
-    public static final String SOUND = "audio/sound_ghost.mp3";
+    public static final String SOUND = "audio/sound_ghost.ogg";
+    public static final String SECRETSOUND = "audio/audio_arthur_rdr2.mp3";
 
     public static void LOAD_ALL(){
         MANAGER.load(STARTINGSOUND, Sound.class);
@@ -50,6 +51,7 @@ public class Assets {
         MANAGER.load(HEALING, Sound.class);
         MANAGER.load(GHOSTS, TextureAtlas.class);
         MANAGER.load(SOUND, Sound.class);
+        MANAGER.load(SECRETSOUND, Sound.class);
     }
 
     public static void DISPOSE_ALL(){
