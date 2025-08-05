@@ -210,7 +210,7 @@ public class GameScreen extends InputAdapter implements Screen {
     // --------------------------------------HAYALET DÜŞMANLARIN ÇİZİMİ VE MANTIĞI-----------------------------------------
     //  Bütün bu hayalet düşmanlar için yeni bir Array tanımlamak istemedim. Zaten 8 adet maksimum olacak şekilde ayarladım
         if (!snake.isDying) {
-            if (snake.applesEaten >= 10) {
+            if (snake.applesEaten >= 40) {
                 yellow.draw(delta, MainGame.batch);
                 yellow.logic(delta, MainGame.viewport.getWorldWidth(), MainGame.viewport.getWorldHeight());
                 yellow.update(delta);
