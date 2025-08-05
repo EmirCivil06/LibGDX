@@ -26,7 +26,7 @@ public class JellyBeans {
     }
 
     public boolean check(){
-        return MathUtils.random(0, 100) % 13 == 0;
+        return MathUtils.random(0, 100) % 14 == 0;
     }
 
     public void try_to_spawn(){

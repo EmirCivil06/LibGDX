@@ -1,0 +1,20 @@
+
+
+Version:	3.50
+CmdLine:	C:\Users\emir_\projects\LibGDX\windows\Pac-Snake.exe --l4j-debug
+JNI:		No
+WOW64:		Yes
+Working dir:	C:\Users\emir_\projects\LibGDX\windows\.
+Requires JDK:	No
+Requires 64-Bit: No
+Java min ver:	
+Java max ver:	
+Substitute:	JAVA_HOME = C:\Users\emir_\AppData\Local\Programs\Eclipse Adoptium\jdk-17.0.15.6-hotspot\
+Substitute:	PATH = C:\Program Files\Common Files\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\dotnet\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\Program Files\NVIDIA Corporation\NVIDIA app\NvDLISR;C:\Program Files\Git\cmd;C:\Program Files\CMake\bin;C:\Program Files\Go\bin;C:\Program Files (x86)\Microsoft SQL Server\160\Tools\Binn\;C:\Program Files\Microsoft SQL Server\160\Tools\Binn\;C:\Program Files\Microsoft SQL Server\160\DTS\Binn\;C:\Program Files\WiX Toolset v6.0\bin\x86;C:\Program Files\WiX Toolset v6.0\bin;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Users\emir_\AppData\Local\Programs\Eclipse Adoptium\jdk-17.0.15.6-hotspot\bin;C:\Users\emir_\AppData\Local\Programs\Python\Python312\Scripts\;C:\Users\emir_\AppData\Local\Programs\Python\Python312\;C:\Users\emir_\AppData\Local\Programs\Python\Launcher\;C:\Users\emir_\AppData\Local\Microsoft\WindowsApps;C:\Users\emir_\AppData\Local\Programs\Microsoft VS Code\bin;C:\Program Files\JetBrains\PyCharm Community Edition 2024.2\bin;;C:\Users\emir_\.dotnet\tools;C:\msys64\ucrt64\bin;C:\raylib\w64devkit\bin;C:\Users\emir_\go\bin;C:\Users\emir_\AppData\Local\Programs\Ollama;E:\IntelliJ IDEA 2025.1\bin;;C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2025.1\bin;;C:\Program Files\WiX Toolset v6.0\bin\x86;C:\Users\emir_\projects\flutter\bin;C:\Users\emir_\AppData\Local\Programs\Eclipse Adoptium\jdk-17.0.15.6-hotspot\\bin
+JRE paths:	C:\Users\emir_\AppData\Local\Programs\Eclipse Adoptium\jdk-17.0.15.6-hotspot\;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\dotnet\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\Program Files\NVIDIA Corporation\NVIDIA app\NvDLISR;C:\Program Files\Git\cmd;C:\Program Files\CMake\bin;C:\Program Files\Go\bin;C:\Program Files (x86)\Microsoft SQL Server\160\Tools\Binn\;C:\Program Files\Microsoft SQL Server\160\Tools\Binn\;C:\Program Files\Microsoft SQL Server\160\DTS\Binn\;C:\Program Files\WiX Toolset v6.0\bin\x86;C:\Program Files\WiX Toolset v6.0\bin;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Users\emir_\AppData\Local\Programs\Eclipse Adoptium\jdk-17.0.15.6-hotspot\bin;C:\Users\emir_\AppData\Local\Programs\Python\Python312\Scripts\;C:\Users\emir_\AppData\Local\Programs\Python\Python312\;C:\Users\emir_\AppData\Local\Programs\Python\Launcher\;C:\Users\emir_\AppData\Local\Microsoft\WindowsApps;C:\Users\emir_\AppData\Local\Programs\Microsoft VS Code\bin;C:\Program Files\JetBrains\PyCharm Community Edition 2024.2\bin;;C:\Users\emir_\.dotnet\tools;C:\msys64\ucrt64\bin;C:\raylib\w64devkit\bin;C:\Users\emir_\go\bin;C:\Users\emir_\AppData\Local\Programs\Ollama;E:\IntelliJ IDEA 2025.1\bin;;C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2025.1\bin;;C:\Program Files\WiX Toolset v6.0\bin\x86;C:\Users\emir_\projects\flutter\bin;C:\Users\emir_\AppData\Local\Programs\Eclipse Adoptium\jdk-17.0.15.6-hotspot\\bin
+Check launcher:	C:\Users\emir_\AppData\Local\Programs\Eclipse Adoptium\jdk-17.0.15.6-hotspot\bin\javaw.exe (OK)
+Version string: 1.017.000_015 / 64-Bit (OK)
+Launcher:	C:\Users\emir_\AppData\Local\Programs\Eclipse Adoptium\jdk-17.0.15.6-hotspot\bin\javaw.exe
+Launcher args:	-jar "C:\Users\emir_\projects\LibGDX\windows\Pac-Snake.exe"
+Args length:	59/32768 chars
+Exit code:	0

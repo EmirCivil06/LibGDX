@@ -225,7 +225,7 @@ public class GameScreen extends InputAdapter implements Screen {
                 blue.logic(delta, MainGame.viewport.getWorldWidth(), MainGame.viewport.getWorldHeight());
                 blue.update(delta);
             }
-            if (snake.applesEaten >= 230) {
+            if (snake.applesEaten >= 240) {
                 pink.draw(delta, MainGame.batch);
                 pink.logic(delta, MainGame.viewport.getWorldWidth(), MainGame.viewport.getWorldHeight());
                 pink.update(delta);
