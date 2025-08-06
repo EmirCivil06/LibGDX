@@ -8,4 +8,4 @@
 ## 🚀 Oyunu Nasıl Oynayabiliriz?
 ---
 - Oyunu çalıştırmak için birkaç seçeneğiniz bulunmakta:
-  - **Kullandığınız İşletim Sistemine Bağlı Olmadan Çalıştırma:** JAR (Java Archive) dosyalarını, **bilgisayarınızda Java'nın yüklü olması şartıyla**, işletim sisteminden bağımsız bir şekilde çalıştırabilirsiniz.  
+  - **Kullandığınız İşletim Sistemine Bağlı Olmadan Çalıştırma:** JAR (Java Archive) dosyalarını, **bilgisayarınızda bir JDK'nin (Java Development Kit) yüklü olması şartıyla**, işletim sisteminden bağımsız bir şekilde çalıştırabilirsiniz. Fakat eğer JDK yüklü değilse https://www.oracle.com/tr/java/technologies/downloads/ üzerinden bir JDK yüklemeniz gerekebilir. (JDK'nin sürümü 17 ve üzeri olmalıdır.)
