@@ -1,0 +1,17 @@
+items_1.png
+size:1024,512
+repeat:none
+texture_Artilerry
+bounds:971,450,32,32
+texture_apple
+bounds:679,102,126,147
+texture_golden_apple
+bounds:807,140,120,140
+texture_heart
+bounds:452,24,225,225
+texture_jellybeans
+bounds:452,251,315,231
+texture_shield
+bounds:2,2,448,480
+texture_xmark
+bounds:769,282,200,200

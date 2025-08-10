@@ -5,7 +5,6 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 
 public class Ghost implements Pool.Poolable {
@@ -53,13 +52,6 @@ public class Ghost implements Pool.Poolable {
         warn = new ParticleEffect();
         warn.load(Gdx.files.internal("particles/warning.p"), Gdx.files.internal("particles"));
 
-        Array<TextureAtlas.AtlasRegion> frames = atlas.findRegions(regionName);
-        if (frames == null || frames.size == 0) {
-            throw new IllegalStateException("Region not found in atlas: " + regionName);
-        }
-        animation = new Animation<>(0.15f, frames);
-
-
         ghost = new Sprite(animation.getKeyFrame(0f, true));
         ghost.setSize(17.5f, 17.5f);
         float randomX = MathUtils.random(0, 500 - ghost.getWidth());
@@ -78,6 +70,8 @@ public class Ghost implements Pool.Poolable {
     }
 
     public boolean Overlaps(Snake snake){
+        if (snake.invincible) ghost.setAlpha(0.75f);
+        else ghost.setAlpha(1f);
         return hitbox.overlaps(snake.hitbox);
     }
 
@@ -113,5 +107,10 @@ public class Ghost implements Pool.Poolable {
     @Override
     public void reset() {
 
+    }
+
+    public void dispose() {
+        warn.dispose();
+        particle.dispose();
     }
 }

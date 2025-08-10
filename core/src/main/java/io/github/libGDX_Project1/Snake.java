@@ -22,14 +22,14 @@ public class Snake {
     protected Direction lastLookDirection = Direction.RIGHT;
     protected boolean goingRight = Gdx.input.isKeyPressed(Input.Keys.D);
     protected boolean goingLeft = Gdx.input.isKeyPressed(Input.Keys.A);
-    protected boolean damaged, ATE_APPLE, invincible, ATE_BEANS, healed_by_BEAN, ATE_5, isDying = false;
+    protected boolean damaged, ATE_APPLE, invincible, ATE_BEANS, healed_by_BEAN, ATE_5, isDying = false, NO = false;
     protected float CENTER_X;
     protected Color originalColor;
     protected CharacterShadow shadow;
     private boolean healingEffectActive= false;
     private float DeathTimer, COOLDOWN = 0;
     private static final float COUNTDOWN = 0.5f;
-    protected Sound eating, hiss, secret;
+    protected Sound eating, hiss, secret, no;
 
     public Snake(){
         shadow = new CharacterShadow();
@@ -43,10 +43,10 @@ public class Snake {
         movingAnim = new Animation<>(0.085f, entireAtlas.findRegions("mov"));
         movingAnim.setPlayMode(Animation.PlayMode.LOOP);
 
-        rightFacedEatingAnim = new Animation<>(0.085f, entireAtlas.findRegions("eating"));
+        rightFacedEatingAnim = new Animation<>(0.081f, entireAtlas.findRegions("eating"));
         rightFacedEatingAnim.setPlayMode(Animation.PlayMode.LOOP);
 
-        leftFacedEatingAnim = new Animation<>(0.085f, entireAtlas.findRegions("eatingl"));
+        leftFacedEatingAnim = new Animation<>(0.081f, entireAtlas.findRegions("eatingl"));
         leftFacedEatingAnim.setPlayMode(Animation.PlayMode.LOOP);
 
         Moving = new Sprite(movingAnim.getKeyFrame(0));
@@ -70,6 +70,7 @@ public class Snake {
         eating = Assets.MANAGER.get(Assets.EATING, Sound.class);
         hiss = Assets.MANAGER.get(Assets.HISS, Sound.class);
         secret = Assets.MANAGER.get(Assets.SECRETSOUND, Sound.class);
+        no = Assets.MANAGER.get(Assets.CANT_EAT, Sound.class);
     }
 
     public boolean SNAKE_EVENT_SETTER_DAMAGED(float timer){
@@ -178,7 +179,7 @@ public class Snake {
 
     public void SNAKE_EVENT_SETTER_HEALING(){
             if (!healingEffectActive) return;
-            Color targetColor = new Color(0f, 1f, 0f, 1f);
+            Color targetColor = Color.GREEN;
             float delta = Gdx.graphics.getDeltaTime();
 
             if (fadingIn) {
@@ -209,16 +210,26 @@ public class Snake {
             HissDelay = 0;
         }
 
+        NO = false;
         boolean eaten = false;
         if ((rightFacedEatingAnim.getKeyFrameIndex(Delta) == 3 || leftFacedEatingAnim.getKeyFrameIndex(Delta) == 3) && isEating) {
             if (hitbox.overlaps(Apple.hitbox) || (hitbox.overlaps(jellyBeans.hitbox) && !invincible)){
-                if (hitbox.overlaps(jellyBeans.hitbox) && MathUtils.random(1, 100) == 1) secret.play(0.5f);
                 eaten = true;
+            }
+            if (hitbox.overlaps(jellyBeans.hitbox) && MathUtils.random(1, 200) == 1) secret.play(0.8f);
+        }
+
+        if ((rightFacedEatingAnim.getKeyFrameIndex(Delta) == 3 || leftFacedEatingAnim.getKeyFrameIndex(Delta) == 3) && isEating) {
+            if (hitbox.overlaps(jellyBeans.hitbox) && invincible) {
+                NO = true;
             }
         }
 
         if (eaten && COOLDOWN <= 0f) {
             eating.play(0.25f, randomPitch, 0);
+            COOLDOWN = COUNTDOWN;
+        } else if (NO && COOLDOWN <= 0f) {
+            no.play(1, 0.9f, 0);
             COOLDOWN = COUNTDOWN;
         }
     }

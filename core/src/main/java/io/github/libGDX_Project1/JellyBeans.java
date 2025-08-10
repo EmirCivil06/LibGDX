@@ -13,20 +13,20 @@ public class JellyBeans {
     protected Rectangle hitbox = new Rectangle();
     protected float Starting_X = 560;
     protected float Starting_y = 285;
-    protected final float WIDTH = 25;
-    protected final float HEIGHT = 25;
+    protected final float WIDTH = 22.5f;
+    protected final float HEIGHT =  (WIDTH * 231) / 315f;
     protected Sound healing;
 
     JellyBeans() {
-        sprite = new Sprite(Assets.MANAGER.get(Assets.ITEMS, TextureAtlas.class).findRegion("texture_jellybeans"));
+        sprite = new Sprite(Assets.MANAGER.get(Assets.ITEMS_1, TextureAtlas.class).findRegion("texture_jellybeans"));
         sprite.setSize(WIDTH, HEIGHT);
         sprite.setPosition(Starting_X, Starting_y);
         healing = Assets.MANAGER.get(Assets.HEALING, Sound.class);
         hitbox.set(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
     }
 
-    public boolean check(){
-        return MathUtils.random(0, 100) % 14 == 0;
+    private boolean check(){
+        return MathUtils.random(0, 100) % 13 == 0;
     }
 
     public void try_to_spawn(){
@@ -45,6 +45,14 @@ public class JellyBeans {
             return snake.hitbox.overlaps(hitbox);
         }
         return false;
+    }
+
+    public float getX() {
+        return sprite.getX();
+    }
+
+    public float getY() {
+        return sprite.getY();
     }
 
 }

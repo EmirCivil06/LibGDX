@@ -18,6 +18,8 @@ public class Main extends Game {
 
     public Preferences preferences;
     public String BooleanKey = "gamePlayedAtLeastOnce", IntegerKey = "highScore";
+    protected Ghost yellow_1, red_1, blue_1, pink_1;
+    public float pixelsPerUnit = 2.8f;
 
     @Override
     public void create(){
@@ -31,7 +33,7 @@ public class Main extends Game {
         pixeloid = generator.generateFont(param1);
         pixeloid.getData().setScale(1.05f);
 
-        items = Assets.MANAGER.get(Assets.ITEMS, TextureAtlas.class);
+        items = Assets.MANAGER.get(Assets.ITEMS_1, TextureAtlas.class);
         items_2 = Assets.MANAGER.get(Assets.ITEMS_2, TextureAtlas.class);
         backgroundTexture = Assets.MANAGER.get(Assets.ITEMS_2, TextureAtlas.class).findRegion("texture_grass_background");
         background = new Sprite(backgroundTexture);
@@ -44,17 +46,32 @@ public class Main extends Game {
         }
         mainMenuScreen = new MainMenuScreen(this);
         setScreen(mainMenuScreen);
+        yellow_1 = new Ghost(GhostType.YELLOW);
+        red_1 = new Ghost(GhostType.RED);
+        blue_1 = new Ghost(GhostType.BLUE);
+        pink_1 = new Ghost(GhostType.PINK);
     }
     @Override
     public void resize(int width, int height){
         viewport.update(width, height, true);
     }
 
+    public void setActiveGhostOnProgress(Ghost ghost, int setGameProgressLimit, int achievedGameProgress, float delta){
+        if (achievedGameProgress >= setGameProgressLimit) {
+            ghost.draw(delta, batch);
+            ghost.logic(delta, viewport.getWorldWidth(), viewport.getWorldHeight());
+            ghost.update(delta);
+        }
+    }
+
+    public boolean OtherGhostOverlaps(Snake snake) {
+        return yellow_1.Overlaps(snake) || red_1.Overlaps(snake) || blue_1.Overlaps(snake) || pink_1.Overlaps(snake);
+    }
 
     @Override
     public void render(){
         super.render();
-        Gdx.graphics.setForegroundFPS(90);
+        System.out.println(Gdx.graphics.getFramesPerSecond());
     }
 
     @Override

@@ -88,6 +88,7 @@ public class Components {
         newHighScore.setSize(300, 300);
         newHighScore.setPosition((float) (Gdx.graphics.getWidth()) / 2, 900);
         newHighScore.setFontScale(2f);
+
     }
 
 
@@ -137,7 +138,7 @@ public class Components {
         if (sceneryChangingControl > snake.D_INTERVAL + 1.25f) {
             blackSlide.addAction(Actions.sequence(
                 Actions.moveTo(0, 0),
-                Actions.fadeIn(0.6f),
+                Actions.fadeIn(0.3f),
                 Actions.run(() -> Components.MainMusic.stop()),
                 Actions.run(() -> MainGame.setScreen(new GameOverScreen(MainGame))),
                 Actions.run(screen::dispose)

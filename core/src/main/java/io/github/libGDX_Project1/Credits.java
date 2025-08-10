@@ -54,7 +54,7 @@ public class Credits extends InputAdapter implements Screen {
         Label.LabelStyle style_1 = new Label.LabelStyle(font_1, Color.RED);
         label_0 = new Label("A Game By Emir Civil \n \n Müzik \n \"SWORD\" Originally from game Deltarune \n Remixed by Melih Karal \n \n SFX ve Grafikler \n Includes assets inspired from (Games/Websites): \n Undertale \n Pac-Man \n Minecraft \n Super Mario Bros. \n Pixabay \n The Spriters Resource \n Myinstants \n Squarespace \n \n Playtesters \n Oyunumuzu test edenlere tesekkürlerimizi sunuyoruz! \n Talha Şenol \n Yiğit Doğan \n \n \n Bu oyundaki assetler eğitim amaçlı diğer oyunlardan ve web sitelerinden alınmıştır ve düzenlenmiştir. \n Orjinal assetlerin bütün hakları yukarıda belirtilen web sitelerine, yayıncılarına ve ek olarak Nintendo gibi kuruluşlara aittir. \n BU OYUN SADECE VE SADECE EĞİTİM AMAÇLI YAPILMIŞTIR.", style_0);
         label_1 = new Label("DISCLAIMER", style_1);
-        label_2 = new Label("Sürüm 1.0.1", style_0);
+        label_2 = new Label("Sürüm 1.0.2", style_0);
     }
 
     @Override

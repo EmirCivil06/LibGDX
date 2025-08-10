@@ -29,7 +29,7 @@ public class GameScreen extends InputAdapter implements Screen {
     private final Apple Apple;
     Array<Bullet> bullets = new Array<>();
     private final JellyBeans jellyBeans;
-    protected TextureRegion heart;
+    protected TextureRegion heart, cannon, canon;
     protected Sprite shieldIcon;
 
     private float Delta_E;
@@ -38,11 +38,12 @@ public class GameScreen extends InputAdapter implements Screen {
     private float Timer_Inv;
     private float TIMER;
     private float Timer_Healing;
+    private final float shieldSize = 12f;
     private boolean bulletFired = false, wasEating = false, highScored = false;
 
     private final Components components;
     private Stage stage;
-    protected Image blackSlide;
+    protected Image blackSlide, xMark;
     private final Ghost yellow, red, blue, pink;
     private final Container<Label> container;
 
@@ -51,8 +52,8 @@ public class GameScreen extends InputAdapter implements Screen {
         Apple = new Apple();
         snake = new Snake();
         jellyBeans = new JellyBeans();
-        heart = Assets.MANAGER.get(Assets.ITEMS, TextureAtlas.class).findRegion("texture_heart");
-        shieldIcon = new Sprite(Assets.MANAGER.get(Assets.ITEMS, TextureAtlas.class).findRegion("texture_shield"));
+        heart = Assets.MANAGER.get(Assets.ITEMS_1, TextureAtlas.class).findRegion("texture_heart");
+        shieldIcon = new Sprite(Assets.MANAGER.get(Assets.ITEMS_1, TextureAtlas.class).findRegion("texture_shield"));
 
         components = new Components();
         yellow = new Ghost(GhostType.YELLOW);
@@ -68,6 +69,10 @@ public class GameScreen extends InputAdapter implements Screen {
         container.setPosition(components.newHighScore.getX(), components.newHighScore.getY(), Align.center);
         container.setOrigin(container.getWidth() / 2, container.getHeight() / 2);
         container.setTransform(true);
+
+        cannon = Assets.MANAGER.get(Assets.ITEMS_1, TextureAtlas.class).findRegion("texture_Artilerry");
+        canon = new TextureRegion(cannon);
+        canon.flip(true, false);
     }
 
     @Override
@@ -85,10 +90,17 @@ public class GameScreen extends InputAdapter implements Screen {
         blackSlide.setSize(Gdx.graphics.getWidth() * 1.5f, Gdx.graphics.getHeight());
         blackSlide.setPosition(0, 0);
         blackSlide.addAction(Actions.sequence(
+            Actions.delay(0.2f),
             Actions.moveTo(-Gdx.graphics.getWidth() * 1.5f, 0, 0.6f),
             Actions.delay(0.4f),
             Actions.fadeOut(0.5f)
         ));// sağdan başlasın
+
+        xMark = new Image(Assets.MANAGER.get(Assets.ITEMS_1, TextureAtlas.class).findRegion("texture_xmark"));
+        xMark.setSize(shieldSize * MainGame.pixelsPerUnit, shieldSize * MainGame.pixelsPerUnit);
+        xMark.addAction(Actions.alpha(0));
+
+        stage.addActor(xMark);
         stage.addActor(container);
         stage.addActor(components.highScore);
         stage.addActor(components.scoreDisplay);
@@ -103,7 +115,6 @@ public class GameScreen extends InputAdapter implements Screen {
         components.highScore.setText("Yüksek Skor: " + MainGame.preferences.getInteger(MainGame.IntegerKey));
         stage.act(delta);
         stage.draw();
-
     }
 
     private void draw(float delta){
@@ -131,6 +142,7 @@ public class GameScreen extends InputAdapter implements Screen {
         Apple.sprite.draw(MainGame.batch);
         jellyBeans.sprite.draw(MainGame.batch);
 
+
         // -------------------------------------------------------------------------------------
         // -------------------BULLET AKTİVASYONU, ÇİZİMİ VE MANTIĞI-----------------------------
         for (Bullet bullet : bullets) {
@@ -153,7 +165,7 @@ public class GameScreen extends InputAdapter implements Screen {
         // ----------------------------------------------------------------------------------------------------------------------
         // ----------------------------------------------------------------------------------------------------------------------
 
-        if ((yellow.Overlaps(snake) || red.Overlaps(snake) || blue.Overlaps(snake) || pink.Overlaps(snake))) {
+        if ((yellow.Overlaps(snake) || red.Overlaps(snake) || blue.Overlaps(snake) || pink.Overlaps(snake) || MainGame.OtherGhostOverlaps(snake))) {
             damageCharacter(pitch);
         }
 
@@ -195,6 +207,11 @@ public class GameScreen extends InputAdapter implements Screen {
         // ---------------------------------------------------------------------------------------------------------------
         // ---------------------------------------------------------------------------------------------------------------
 
+        MainGame.batch.draw(cannon, -40, -30, 30f, 30f, 60f, 60f, 1, 1, 45);
+        MainGame.batch.draw(cannon, 480, 220, 30f, 30f, 60f, 60f, 1, 1, 225);
+        MainGame.batch.draw(canon, -40, 220, 30f, 30f, 60f, 60f, 1, 1, -225);
+        MainGame.batch.draw(canon, 480, -30, 30f, 30f, 60f, 60f, 1, 1, -45);
+
         components.setInfoTable(MainGame.batch, snake, delta, heart);
 
     // ------------------------------PARÇACIK EFEKTİ ÇİZİMİ-----------------------------------
@@ -210,34 +227,23 @@ public class GameScreen extends InputAdapter implements Screen {
     // --------------------------------------HAYALET DÜŞMANLARIN ÇİZİMİ VE MANTIĞI-----------------------------------------
     //  Bütün bu hayalet düşmanlar için yeni bir Array tanımlamak istemedim. Zaten 8 adet maksimum olacak şekilde ayarladım
         if (!snake.isDying) {
-            if (snake.applesEaten >= 40) {
-                yellow.draw(delta, MainGame.batch);
-                yellow.logic(delta, MainGame.viewport.getWorldWidth(), MainGame.viewport.getWorldHeight());
-                yellow.update(delta);
-            }
-            if (snake.applesEaten >= 70) {
-                red.draw(delta, MainGame.batch);
-                red.logic(delta, MainGame.viewport.getWorldWidth(), MainGame.viewport.getWorldHeight());
-                red.update(delta);
-            }
-            if (snake.applesEaten >= 130) {
-                blue.draw(delta, MainGame.batch);
-                blue.logic(delta, MainGame.viewport.getWorldWidth(), MainGame.viewport.getWorldHeight());
-                blue.update(delta);
-            }
-            if (snake.applesEaten >= 240) {
-                pink.draw(delta, MainGame.batch);
-                pink.logic(delta, MainGame.viewport.getWorldWidth(), MainGame.viewport.getWorldHeight());
-                pink.update(delta);
-            }
+            MainGame.setActiveGhostOnProgress(yellow, 40, snake.applesEaten, delta);
+            MainGame.setActiveGhostOnProgress(red, 70, snake.applesEaten, delta);
+            MainGame.setActiveGhostOnProgress(blue, 130, snake.applesEaten, delta);
+            MainGame.setActiveGhostOnProgress(pink, 230, snake.applesEaten, delta);
+            MainGame.setActiveGhostOnProgress(MainGame.yellow_1, 450, snake.applesEaten, delta);
+            MainGame.setActiveGhostOnProgress(MainGame.red_1, 880, snake.applesEaten, delta);
+            MainGame.setActiveGhostOnProgress(MainGame.blue_1, 1400, snake.applesEaten, delta);
+            MainGame.setActiveGhostOnProgress(MainGame.pink_1, 2500, snake.applesEaten, delta);
         }
 
         snake.SNAKE_EVENT_SETTER_DEATH(MainGame.batch);
         if (snake.invincible) {
-            MainGame.batch.draw(shieldIcon, snake.Idle.getX() - 0.75f, snake.Idle.getY() + snake.Idle.getHeight() + 1.55f, 12f, 12f);
-            Components.timer -= Gdx.graphics.getDeltaTime();
+            MainGame.batch.draw(shieldIcon, snake.Idle.getX() - 1f, snake.Idle.getY() + snake.Idle.getHeight() + 1.4f, shieldSize, shieldSize);
+            Components.timer -= delta;
             components.font.draw(MainGame.batch, TIME, snake.Idle.getX() + 12.5f, snake.Idle.getY() + snake.Idle.getHeight() * 1.5f);
         } else Components.timer = 7.0f;
+
         MainGame.batch.end();
     }
 
@@ -245,6 +251,8 @@ public class GameScreen extends InputAdapter implements Screen {
         float worldWidth = MainGame.viewport.getWorldWidth();
         float worldHeight = MainGame.viewport.getWorldHeight();
         snake.SNAKE_EVENT_SETTER_CLAMP(worldWidth, worldHeight);
+
+        xMark.setPosition((snake.Idle.getX() - 1) * MainGame.pixelsPerUnit, (snake.Idle.getY() + snake.Idle.getHeight() + 1.4f) * MainGame.pixelsPerUnit);
 
         if (Components.score > MainGame.preferences.getInteger(MainGame.IntegerKey)) {
             if (!highScored) {
@@ -323,7 +331,6 @@ public class GameScreen extends InputAdapter implements Screen {
                 snake.invincible = false;
                 snake.ATE_BEANS = false;
                 snake.healed_by_BEAN = false;
-                TIMER = 0;   // sadece burada sıfırla
             }
         }
 
@@ -377,6 +384,14 @@ public class GameScreen extends InputAdapter implements Screen {
         // ----------------------------------------------------------------------------------------
 
         if (snake.applesEaten == 1) Components.MainMusic.play();
+
+        if (snake.NO) {
+            xMark.addAction(Actions.sequence(
+                Actions.alpha(1),
+                Actions.delay(0.4f),
+                Actions.fadeOut(0.3f)
+            ));
+        }
     }
 
     public void damageCharacter(float soundPitch) {

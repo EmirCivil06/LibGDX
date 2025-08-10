@@ -10,12 +10,12 @@ public class Bullet  {
     protected TextureAtlas atlas;
     protected Animation<TextureRegion> animation;
     protected Sprite sprite;
-    protected Sound bounce;
+    protected Sound bounce, firing;
     protected Rectangle hitbox;
     protected float starting_X, boundingX, boundingY, boundingWidth, boundingHeight;
     protected float starting_Y = 237;
     protected float stateTime, Timer_Self = 0;
-    protected final float INTERVAL = 0.0755f;
+    protected final float INTERVAL = 0.07f;
     protected ParticleEffect effect_self, effect_trail_0, effect_trail_1;
     protected CharacterShadow shadow;
 
@@ -60,6 +60,8 @@ public class Bullet  {
         shadow = new CharacterShadow();
 
         hitbox = new Rectangle();
+        firing = Assets.MANAGER.get(Assets.FIRING, Sound.class);
+        firing.play(0.6f);
     }
 
     public void ActivateLogic(float worldWidth, float worldHeight){

@@ -52,7 +52,7 @@ public class GameOverScreen extends InputAdapter implements Screen {
         Image blackSLIDE = new Image(blackSlide);
         blackSLIDE.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         blackSLIDE.setPosition(0,0);
-        blackSLIDE.addAction(Actions.fadeOut(0.6f));
+        blackSLIDE.addAction(Actions.fadeOut(0.3f));
         stage.addActor(blackSLIDE);
     }
 
