@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -29,7 +30,6 @@ public class GameOverScreen extends InputAdapter implements Screen {
         MainGame.background.setPosition(0, 0);
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Pixelon.ttf"));
-        FreeTypeFontGenerator generator1 = new FreeTypeFontGenerator(Gdx.files.internal("Pixeloid.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter_one = new FreeTypeFontGenerator.FreeTypeFontParameter();
         FreeTypeFontGenerator.FreeTypeFontParameter parameter_two = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter_two.size = 12;
@@ -38,6 +38,7 @@ public class GameOverScreen extends InputAdapter implements Screen {
         font_1 = generator.generateFont(parameter_one);
         font_1.getData().setScale(1.5f);
         generator.dispose();
+
     }
 
     @Override
@@ -53,6 +54,17 @@ public class GameOverScreen extends InputAdapter implements Screen {
         blackSLIDE.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         blackSLIDE.setPosition(0,0);
         blackSLIDE.addAction(Actions.fadeOut(0.3f));
+
+        Image gameOver = new Image(Assets.MANAGER.get(Assets.ITEMS_2, TextureAtlas.class).findRegion("texture_dead_lying"));
+        gameOver.setSize(73 * MainGame.pixelsPerUnit / 1.5f, 35 * MainGame.pixelsPerUnit / 1.5f);
+        float x = ((MainGame.viewport.getWorldWidth() * MainGame.pixelsPerUnit) - gameOver.getWidth()) / 2;
+        gameOver.setPosition(x, 130 * MainGame.pixelsPerUnit);
+        Image shadow = new Image(Assets.MANAGER.get(Assets.ITEMS_2, TextureAtlas.class).findRegion("texture_shadow"));
+        shadow.setSize(gameOver.getWidth(), gameOver.getHeight() / 3.5f);
+        shadow.setPosition(x, 130 * MainGame.pixelsPerUnit);
+        shadow.addAction(Actions.alpha(0.4f));
+        stage.addActor(shadow);
+        stage.addActor(gameOver);
         stage.addActor(blackSLIDE);
     }
 

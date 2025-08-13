@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 
 public class Components {
-    protected SpriteBatch batch;
     protected BitmapFont font_1, font_2;
     protected BitmapFont font, headerFont, infoFont;
     protected Sound startingSound, gameOverSound, weakness, destruction;
@@ -23,10 +22,9 @@ public class Components {
     protected float sceneryChangingControl = 0;
     protected float TableTimer;
     protected Sound damageSound, successfullyAte, lifeUp;
-    protected Label highScore, scoreDisplay, newHighScore;
+    protected Label highScore, scoreDisplay, newHighScore, minusOne;
 
     public Components(){
-        batch =  new SpriteBatch();
         healing = new ParticleEffect();
         healing.load(Gdx.files.internal("particles/healing_particles.p"), Gdx.files.internal("particles/"));
 
@@ -73,6 +71,7 @@ public class Components {
 
         Label.LabelStyle style = new Label.LabelStyle(font, Color.YELLOW);
         Label.LabelStyle style1 = new Label.LabelStyle(font, Color.WHITE);
+        Label.LabelStyle style2 = new Label.LabelStyle(font, Color.RED);
 
         highScore = new Label("Yüksek Skor: ",style);
         highScore.setSize(300, 300);
@@ -89,6 +88,9 @@ public class Components {
         newHighScore.setPosition((float) (Gdx.graphics.getWidth()) / 2, 900);
         newHighScore.setFontScale(2f);
 
+        minusOne = new Label("-1", style2);
+        minusOne.setSize(300, 300);
+        minusOne.setFontScale(2.25f);
     }
 
 

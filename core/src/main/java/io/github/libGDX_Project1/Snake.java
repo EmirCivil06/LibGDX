@@ -23,7 +23,6 @@ public class Snake {
     protected boolean goingRight = Gdx.input.isKeyPressed(Input.Keys.D);
     protected boolean goingLeft = Gdx.input.isKeyPressed(Input.Keys.A);
     protected boolean damaged, ATE_APPLE, invincible, ATE_BEANS, healed_by_BEAN, ATE_5, isDying = false, NO = false;
-    protected float CENTER_X;
     protected Color originalColor;
     protected CharacterShadow shadow;
     private boolean healingEffectActive= false;
@@ -145,7 +144,6 @@ public class Snake {
             dead_0.flip(true, false);
             dead_1.flip(true, false);
         }
-        CENTER_X = Idle.getX() + Idle.getWidth() / 2f;
         shadow.init(Idle.getWidth(), Idle.getHeight(), Idle.getColor().a);
         shadow.changePos_Snake(this, Idle.getX(), Idle.getY(), 1.5f, 1.5f);
         if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) shadow.sprite.setSize(shadow.sprite.getWidth() * 1.0875f, shadow.sprite.getHeight());

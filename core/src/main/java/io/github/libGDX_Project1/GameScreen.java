@@ -39,6 +39,8 @@ public class GameScreen extends InputAdapter implements Screen {
     private float TIMER;
     private float Timer_Healing;
     private final float shieldSize = 12f;
+    private final float LabelX;
+    private final float LabelY;
     private boolean bulletFired = false, wasEating = false, highScored = false;
 
     private final Components components;
@@ -73,6 +75,9 @@ public class GameScreen extends InputAdapter implements Screen {
         cannon = Assets.MANAGER.get(Assets.ITEMS_1, TextureAtlas.class).findRegion("texture_Artilerry");
         canon = new TextureRegion(cannon);
         canon.flip(true, false);
+
+        LabelX = 449 * MainGame.pixelsPerUnit;
+        LabelY = 170 * MainGame.pixelsPerUnit;
     }
 
     @Override
@@ -99,9 +104,12 @@ public class GameScreen extends InputAdapter implements Screen {
         xMark = new Image(Assets.MANAGER.get(Assets.ITEMS_1, TextureAtlas.class).findRegion("texture_xmark"));
         xMark.setSize(shieldSize * MainGame.pixelsPerUnit, shieldSize * MainGame.pixelsPerUnit);
         xMark.addAction(Actions.alpha(0));
+        components.minusOne.addAction(Actions.alpha(0));
+        components.minusOne.setPosition(LabelX, LabelY);
 
         stage.addActor(xMark);
         stage.addActor(container);
+        stage.addActor(components.minusOne);
         stage.addActor(components.highScore);
         stage.addActor(components.scoreDisplay);
         stage.addActor(blackSlide);
@@ -135,7 +143,6 @@ public class GameScreen extends InputAdapter implements Screen {
         MainGame.batch.setProjectionMatrix(MainGame.viewport.getCamera().combined);
         components.healing.start();
         components.healing.update(delta);
-
         MainGame.batch.begin();
         MainGame.batch.draw(MainGame.backgroundTexture,0,0, MainGame.viewport.getWorldWidth(), MainGame.viewport.getWorldHeight());
         snake.shadow.sprite.draw(MainGame.batch);
@@ -150,7 +157,6 @@ public class GameScreen extends InputAdapter implements Screen {
             if (bullet.hitbox.overlaps(snake.hitbox)) {
                 // Çarpışma işlemleri
                 damageCharacter(pitch);
-
                 if (snake.invincible){
                     bullet.sprite.setAlpha(0);
                     if (bullet.Timer_Self > bullet.INTERVAL) {
@@ -396,6 +402,12 @@ public class GameScreen extends InputAdapter implements Screen {
 
     public void damageCharacter(float soundPitch) {
         if (!snake.damaged && !snake.invincible) {
+            components.minusOne.addAction(Actions.sequence(
+                Actions.fadeIn(0.075f),
+                Actions.moveTo(components.minusOne.getX(), components.minusOne.getY() - 100, 0.9f),
+                Actions.fadeOut(0.075f),
+                Actions.run(() -> components.minusOne.setPosition(LabelX, LabelY))
+            ));
             components.damageSound.play(0.5f, soundPitch, 0);
             snake.damaged = true;
             Timer_Inv = 0;
