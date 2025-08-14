@@ -1,11 +1,50 @@
-# :snake: PAC-SNAKE: Bir LibGDX Oyunu
+# 🐍 PAC-SNAKE
+PAC-SNAKE, LibGDX ile geliştirilmiş 2 boyutlu bir Snake/Pac-Man hibrit oyunudur. 
+Amaç, karakterinizi düşman saldırılarından koruyarak en yüksek skoru elde etmektir.
+
+## 🎮 Özellikler
+- **5 farklı oyun objesi** (Farklı mekanikler ve görünümler)
+- **5 farklı sahne** (Zorluk seviyeleri ve görsel temalar)
+- **Yüksek skor sistemi**
+- **Ana müzik ve çeşitli ses efektleri**
+- **Eğlenceli ve öğrenmesi kolay oynanış**
+
+## 🚀 Nasıl Oynanır?
+
+> ⚠️ Oyunu çalıştırabilmek için bilgisayarınızda **Java** kurulu olmalıdır.
+
+### 1. Her İşletim Sisteminde Çalıştırma
+- Proje ekinde yer alan (["artifacts" adlı klasörde](./out/artifacts)) **JAR** dosyasını çalıştırarak oyunu başlatabilirsiniz.
+
+### 2. Windows
+- Projenin ekinde yer alan (["windows" adlı klasörde](./windows)) **.exe** dosyasını çalıştırarak oynayabilirsiniz.
+
+### 3. macOS
+- macOS doğrudan .exe dosyalarını çalıştırmaz.  
+- [Whisky](https://getwhisky.app/) gibi üçüncü taraf yazılımlar kullanılabilir.
+
+### 4. Linux
+- Linux’ta .exe dosyalarını çalıştırmak için [Wine](https://www.winehq.org/) kullanılabilir.
+
 ---
-- Pac-Snake eğitimsel amaçlarla yapılmış 2 boyutlu bir snake/pac-man hibrit oyunudur. Oyunun amacı kontrol edilen karakteri artan düşman saldırılarına karşı savunabilmek ve kişisel yüksek skorunuzu aşabilmektir. Oyunda:
-  - 5 farklı oyun objesi ve 5 farklı sahne,
-  - Birçok ses efekti ve ana müzik,
-  - Yüksek skor sistemi ve farklı birçok özellik bulunmaktadır.
----
-## 🚀 Oyunu Nasıl Oynayabiliriz?
----
-- Oyunu çalıştırmak için birkaç seçeneğiniz bulunmakta:
-  - **Kullandığınız İşletim Sistemine Bağlı Olmadan Çalıştırma:** JAR (Java Archive) dosyalarını, **bilgisayarınızda bir JDK'nin (Java Development Kit) yüklü olması şartıyla**, işletim sisteminden bağımsız bir şekilde çalıştırabilirsiniz. Fakat eğer JDK yüklü değilse https://www.oracle.com/tr/java/technologies/downloads/ üzerinden bir JDK yüklemeniz gerekebilir. (JDK'nin sürümü 17 ve üzeri olmalıdır.)
+
+## 🤝 Katkıda Bulunanlar
+- Yiğit Doğan
+- Melih Karal
+- Talha Şenol
+
+## ⚠️ Lisans ve Kullanım Uyarısı
+Bu oyunda kullanılan tüm görseller, sesler ve diğer içerikler **yalnızca eğitim amaçlıdır**.  
+Orijinal assetlerin hakları aşağıdaki yayıncılara aittir:
+
+| Yayıncı | Kaynak |
+|---------|--------|
+| **Toby Fox** | Oyun içi grafikler |
+| **Nintendo** | Oyun içi grafikler |
+| **Mojang Studios** | Oyun içi grafikler |
+| **YouTube** | Ses efektleri |
+| **Pixabay** | Müzik ve ses efektleri |
+| **The Spriters Resource** | Sprite kaynakları |
+| **Myinstants** | Ses efektleri |
+| **Squarespace** | Görsel materyaller |
+
