@@ -12,7 +12,7 @@ public class Main extends Game {
     protected FitViewport viewport;
     protected Sprite background;
     protected TextureRegion backgroundTexture;
-    protected TextureAtlas items, items_2;
+    protected TextureAtlas items;
     protected MainMenuScreen mainMenuScreen;
     protected BitmapFont pixeloid;
 
@@ -34,7 +34,6 @@ public class Main extends Game {
         pixeloid.getData().setScale(1.05f);
 
         items = Assets.MANAGER.get(Assets.ITEMS_1, TextureAtlas.class);
-        items_2 = Assets.MANAGER.get(Assets.ITEMS_2, TextureAtlas.class);
         backgroundTexture = Assets.MANAGER.get(Assets.ITEMS_2, TextureAtlas.class).findRegion("texture_grass_background");
         background = new Sprite(backgroundTexture);
         batch = new SpriteBatch();
@@ -71,7 +70,6 @@ public class Main extends Game {
     @Override
     public void render(){
         super.render();
-        System.out.println(Gdx.graphics.getFramesPerSecond());
     }
 
     @Override

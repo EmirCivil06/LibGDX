@@ -79,6 +79,19 @@ public class Snake {
             sin = 20;
             INV_INTERVAL = D_INTERVAL;
         }
+        if (applesEaten >= 50) {
+            INV_INTERVAL = 3.35f;
+        } if (applesEaten >= 90) {
+            INV_INTERVAL = 3f;
+        } if (applesEaten >= 200) {
+            INV_INTERVAL = 2.5f;
+        } if (applesEaten >= 500) {
+            INV_INTERVAL = 2f;
+        } if (applesEaten >= 800) {
+            INV_INTERVAL = 1.5f;
+        } if (applesEaten >= 1200) {
+            INV_INTERVAL = 1.1f;
+        }
         if (timer < INV_INTERVAL) {
             float alpha = 0.5f + 0.5f * (float)Math.sin(sin * timer); // 30: yanıp sönme hızı
             Idle.setAlpha(alpha);
@@ -124,10 +137,18 @@ public class Snake {
             rightFacedEating.setPosition(Idle.getX(), Idle.getY());
             leftFacedEating.setPosition(Idle.getX(), Idle.getY());
         }
-        float hitboxWidth = Idle.getWidth() * 0.5f;
-        float hitboxHeight = Idle.getHeight() * 0.6f;
-        float hitbox_X = Idle.getX() + (Idle.getWidth() - hitboxWidth) / 1.75f;
-        float hitbox_Y = Idle.getY() + ((Idle.getHeight() - hitboxHeight) / 2f) - 1f;
+        float hitboxWidth = Idle.getWidth() * 0.35f;
+        float hitboxHeight = Idle.getHeight() * 0.7f;
+        float hitbox_X;
+        float hitbox_Y;
+
+        if (lastLookDirection == Direction.RIGHT) {
+             hitbox_X = Idle.getX() + 11f;
+        } else {
+            hitbox_X = Idle.getX() + 5f;
+        }
+        hitbox_Y = Idle.getY() + 3f;
+
         hitbox.set(hitbox_X, hitbox_Y, hitboxWidth, hitboxHeight);
         comp.healing.setPosition(Idle.getX() + Idle.getWidth() / 2, Idle.getY());
 

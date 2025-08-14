@@ -5,9 +5,8 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.Pool;
 
-public class Ghost implements Pool.Poolable {
+public class Ghost  {
     protected Sprite ghost;
     protected Animation<TextureRegion> animation;
     protected TextureAtlas atlas;
@@ -66,7 +65,7 @@ public class Ghost implements Pool.Poolable {
         particle.setPosition(ghost.getX() + ghost.getWidth() / 2, ghost.getY() + ghost.getHeight() / 2);
         warn.start();
         warn.update(delta);
-        hitbox.set(ghost.getX() - 3.5f, ghost.getY() - 3.5f, ghost.getWidth() * 4/5f, ghost.getHeight() * 4/5f);
+        hitbox.set(ghost.getX() - 1.75f, ghost.getY() - 1.75f, ghost.getWidth() * 4.5f/5f, ghost.getHeight() * 4.5f/5f);
     }
 
     public boolean Overlaps(Snake snake){
@@ -104,13 +103,10 @@ public class Ghost implements Pool.Poolable {
         ghost.draw(batch);
     }
 
-    @Override
-    public void reset() {
-
-    }
 
     public void dispose() {
         warn.dispose();
         particle.dispose();
+        sound.dispose();
     }
 }

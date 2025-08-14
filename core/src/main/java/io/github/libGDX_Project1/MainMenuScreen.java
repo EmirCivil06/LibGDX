@@ -56,6 +56,7 @@ public class MainMenuScreen extends InputAdapter implements Screen {
         font_3 = fontGenerator.generateFont(param3);
         font_3.getData().setScale(0.75f);
         generator.dispose();
+        fontGenerator.dispose();
 
         Beggining.play(0.55f);
 
@@ -170,5 +171,6 @@ public class MainMenuScreen extends InputAdapter implements Screen {
         font_2.dispose();
         Beggining.dispose();
         stage.dispose();
+        font_3.dispose();
     }
 }

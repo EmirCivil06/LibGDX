@@ -15,7 +15,7 @@ public class Bullet  {
     protected float starting_X, boundingX, boundingY, boundingWidth, boundingHeight;
     protected float starting_Y = 237;
     protected float stateTime, Timer_Self = 0;
-    protected final float INTERVAL = 0.07f;
+    protected final float INTERVAL = 0.06f;
     protected ParticleEffect effect_self, effect_trail_0, effect_trail_1;
     protected CharacterShadow shadow;
 
@@ -118,7 +118,7 @@ public class Bullet  {
         effect_trail_1.setPosition(sprite.getX() + sprite.getWidth() / 2f, sprite.getY() + sprite.getHeight() / 2f);
         shadow.init(sprite.getWidth(), sprite.getHeight() * 1.1f, sprite.getColor().a);
 
-        float speed = MathUtils.random(143.75f, 207.5f);
+        float speed = MathUtils.random(163.75f, 247.5f);
         float delta = Gdx.graphics.getDeltaTime();
         switch (latestDir){
             case down_right:

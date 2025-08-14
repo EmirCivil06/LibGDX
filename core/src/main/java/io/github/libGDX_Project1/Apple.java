@@ -12,22 +12,23 @@ public class Apple {
     protected Rectangle hitbox = new Rectangle();
     protected float width = 18.5f;
     protected float sizeOffset = 147 / 126f;
+    protected float height = width * sizeOffset;
     protected float starting_X = MathUtils.random(0, 500f - width);
-    protected float starting_Y = MathUtils.random(0, 250 - width * sizeOffset);
+    protected float starting_Y = MathUtils.random(0, 250 - height);
 
     // Aslında yeni elma objesi oluşturmuyoruz, yerini değiştiriyoruz
     public void spawnNew(){
         float coordX = MathUtils.random(50, 500f - width);
-        float coordY = MathUtils.random(50, 250f - width * sizeOffset);
+        float coordY = MathUtils.random(50, 250f - height);
         sprite.setPosition(coordX, coordY);
-        hitbox.set(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
+        hitbox.set(sprite.getX() - (sprite.getWidth() * 0.25f), sprite.getY() - (sprite.getHeight() * 0.25f), sprite.getWidth() * 1.75f, sprite.getHeight() * 1.75f);
     }
 
     Apple(){
         sprite = new Sprite(Assets.MANAGER.get(Assets.ITEMS_1, TextureAtlas.class).findRegion("texture_apple"));
-        sprite.setSize(width, width * sizeOffset);
+        sprite.setSize(width, height);
         sprite.setPosition(starting_X, starting_Y);
-        hitbox.set(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
+        hitbox.set(sprite.getX() - (sprite.getWidth() * 0.25f), sprite.getY() - (sprite.getHeight() * 0.25f), sprite.getWidth() * 1.75f, sprite.getHeight() * 1.75f);
     }
 
     public boolean EatingConditionsCreated(Snake s, float delta) {

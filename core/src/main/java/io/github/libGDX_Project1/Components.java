@@ -158,5 +158,6 @@ public class Components {
         damageSound.dispose();
         successfullyAte.dispose();
         lifeUp.dispose();
+        healing.dispose();
     }
 }

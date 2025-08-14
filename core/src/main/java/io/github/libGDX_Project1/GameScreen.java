@@ -29,7 +29,7 @@ public class GameScreen extends InputAdapter implements Screen {
     private final Apple Apple;
     Array<Bullet> bullets = new Array<>();
     private final JellyBeans jellyBeans;
-    protected TextureRegion heart, cannon, canon;
+    protected TextureRegion heart, cannon, canon, secondApple;
     protected Sprite shieldIcon;
 
     private float Delta_E;
@@ -38,9 +38,14 @@ public class GameScreen extends InputAdapter implements Screen {
     private float Timer_Inv;
     private float TIMER;
     private float Timer_Healing;
+    private final float worldWidth;
+    private final float worldHeight;
     private final float shieldSize = 12f;
     private final float LabelX;
     private final float LabelY;
+    public int scoreAmount = 200;
+    public int bigScoreAmount = 400;
+    public int incrementingAmount = 1;
     private boolean bulletFired = false, wasEating = false, highScored = false;
 
     private final Components components;
@@ -55,6 +60,7 @@ public class GameScreen extends InputAdapter implements Screen {
         snake = new Snake();
         jellyBeans = new JellyBeans();
         heart = Assets.MANAGER.get(Assets.ITEMS_1, TextureAtlas.class).findRegion("texture_heart");
+        secondApple = Assets.MANAGER.get(Assets.ITEMS_1, TextureAtlas.class).findRegion("texture_apple");
         shieldIcon = new Sprite(Assets.MANAGER.get(Assets.ITEMS_1, TextureAtlas.class).findRegion("texture_shield"));
 
         components = new Components();
@@ -78,6 +84,8 @@ public class GameScreen extends InputAdapter implements Screen {
 
         LabelX = 449 * MainGame.pixelsPerUnit;
         LabelY = 170 * MainGame.pixelsPerUnit;
+        worldWidth = MainGame.viewport.getWorldWidth();
+        worldHeight = MainGame.viewport.getWorldHeight();
     }
 
     @Override
@@ -119,8 +127,10 @@ public class GameScreen extends InputAdapter implements Screen {
     public void render(float delta) {
         if (!snake.isDying) snake.SNAKE_EVENT_SETTER_INPUT(187.5f, delta, components);
         draw(delta);
+        update();
         logic(delta);
         components.highScore.setText("Yüksek Skor: " + MainGame.preferences.getInteger(MainGame.IntegerKey));
+
         stage.act(delta);
         stage.draw();
     }
@@ -146,27 +156,31 @@ public class GameScreen extends InputAdapter implements Screen {
         MainGame.batch.begin();
         MainGame.batch.draw(MainGame.backgroundTexture,0,0, MainGame.viewport.getWorldWidth(), MainGame.viewport.getWorldHeight());
         snake.shadow.sprite.draw(MainGame.batch);
+        if (snake.applesEaten >= 400) {
+            MainGame.batch.draw(secondApple, Apple.sprite.getX() - 5f, Apple.sprite.getY(), Apple.width * 0.7f, Apple.height * 0.7f);
+        }
         Apple.sprite.draw(MainGame.batch);
         jellyBeans.sprite.draw(MainGame.batch);
 
 
         // -------------------------------------------------------------------------------------
         // -------------------BULLET AKTİVASYONU, ÇİZİMİ VE MANTIĞI-----------------------------
-        for (Bullet bullet : bullets) {
-            bullet.ActivateLogic(MainGame.viewport.getWorldWidth(), MainGame.viewport.getWorldHeight());
-            if (bullet.hitbox.overlaps(snake.hitbox)) {
-                // Çarpışma işlemleri
+        for (int i = bullets.size - 1; i >= 0; i--) {
+            Bullet b = bullets.get(i);
+            b.ActivateLogic(worldWidth, worldHeight);
+            if (b.hitbox.overlaps(snake.hitbox)) {
                 damageCharacter(pitch);
-                if (snake.invincible){
-                    bullet.sprite.setAlpha(0);
-                    if (bullet.Timer_Self > bullet.INTERVAL) {
+                if (snake.invincible) {
+                    b.sprite.setAlpha(0);
+                    if (b.Timer_Self > b.INTERVAL) {
                         components.destruction.play(0.4f);
-                        bullets.removeIndex(bullets.indexOf(bullet, true));
-                        Components.score += 200;
+                        bullets.removeIndex(i);
+                        Components.score += scoreAmount;
                     }
                 }
             }
         }
+
         components.BULLET_ARRAY_EVENT_SETTER_DRAW(MainGame.batch, bullets, snake);
         // ----------------------------------------------------------------------------------------------------------------------
         // ----------------------------------------------------------------------------------------------------------------------
@@ -254,29 +268,7 @@ public class GameScreen extends InputAdapter implements Screen {
     }
 
     private void logic(float delta){
-        float worldWidth = MainGame.viewport.getWorldWidth();
-        float worldHeight = MainGame.viewport.getWorldHeight();
-        snake.SNAKE_EVENT_SETTER_CLAMP(worldWidth, worldHeight);
-
         xMark.setPosition((snake.Idle.getX() - 1) * MainGame.pixelsPerUnit, (snake.Idle.getY() + snake.Idle.getHeight() + 1.4f) * MainGame.pixelsPerUnit);
-
-        if (Components.score > MainGame.preferences.getInteger(MainGame.IntegerKey)) {
-            if (!highScored) {
-                container.addAction(Actions.sequence(
-                    Actions.moveTo(container.getX(), 650, 0.6f),
-                    Actions.delay(0.3f),
-                    Actions.scaleTo(1.25f, 1.25f, 0.15f),
-                    Actions.scaleTo(1f, 1f, 0.35f),
-                    Actions.delay(1.2f),
-                    Actions.moveTo(container.getX(), 1000, 0.6f)
-                    ));
-                highScored = true;
-            }
-            components.scoreDisplay.setColor(Color.YELLOW);
-            components.highScore.addAction(Actions.moveTo(-350, components.highScore.getY(), 1f));
-            MainGame.preferences.putInteger(MainGame.IntegerKey, Components.score);
-            MainGame.preferences.flush();
-        }
 
         if (!snake.invincible && !snake.ATE_5) {
             Delta_P = 0;
@@ -295,8 +287,8 @@ public class GameScreen extends InputAdapter implements Screen {
         if (Apple.EatingConditionsCreated(snake, Delta_E)) {
             jellyBeans.try_to_spawn();
             Apple.APPLE_EVENT_SETTER_DESPAWN(jellyBeans);
-            Components.score += 200;
-            snake.applesEaten++;
+            Components.score += scoreAmount;
+            snake.applesEaten += incrementingAmount;
             snake.ATE_APPLE = true;
             if (snake.applesEaten % 10 == 0) {
                 components.successfullyAte.play(0.75f);
@@ -311,7 +303,7 @@ public class GameScreen extends InputAdapter implements Screen {
         }
 
         if (jellyBeans.EatingConditionsCreated(snake, Delta_E)) {
-                Components.score += 400;
+                Components.score += bigScoreAmount;
                 Apple.spawnNew();
                 jellyBeans.healing.play(0.55f);
                 components.weakness.play(0.08f);
@@ -344,7 +336,7 @@ public class GameScreen extends InputAdapter implements Screen {
             TIMER = 0;
             snake.healed_by_BEAN = false;
         }
-        components.CHANGE_BULLET_COLOUR(bullets, snake);
+
         // ----------------------------------------------------------------------------------------------------------
         // ----------------------------------------------------------------------------------------------------------
 
@@ -400,7 +392,56 @@ public class GameScreen extends InputAdapter implements Screen {
         }
     }
 
-    public void damageCharacter(float soundPitch) {
+    private void update() {
+        if (Components.score > MainGame.preferences.getInteger(MainGame.IntegerKey)) {
+            if (!highScored) {
+                container.addAction(Actions.sequence(
+                    Actions.moveTo(container.getX(), 650, 0.6f),
+                    Actions.delay(0.3f),
+                    Actions.scaleTo(1.25f, 1.25f, 0.15f),
+                    Actions.scaleTo(1f, 1f, 0.35f),
+                    Actions.delay(1.2f),
+                    Actions.moveTo(container.getX(), 1000, 0.6f)
+                ));
+                highScored = true;
+            }
+            components.scoreDisplay.setColor(Color.YELLOW);
+            components.highScore.addAction(Actions.moveTo(-350, components.highScore.getY(), 1f));
+            MainGame.preferences.putInteger(MainGame.IntegerKey, Components.score);
+            MainGame.preferences.flush();
+        }
+
+        switch (snake.applesEaten) {
+            case 70:
+                scoreAmount = 300;
+                break;
+            case 150:
+                scoreAmount = 400;
+                bigScoreAmount = 500;
+                break;
+            case 300:
+                scoreAmount = 500;
+                bigScoreAmount = 600;
+                break;
+            case 400:
+                incrementingAmount = 2;
+                break;
+            case 700:
+                scoreAmount = 600;
+                bigScoreAmount = 800;
+                break;
+            case 1400:
+                scoreAmount = 750;
+                bigScoreAmount = 1250;
+                break;
+        }
+
+        snake.SNAKE_EVENT_SETTER_CLAMP(worldWidth, worldHeight);
+        components.CHANGE_BULLET_COLOUR(bullets, snake);
+
+    }
+
+    private void damageCharacter(float soundPitch) {
         if (!snake.damaged && !snake.invincible) {
             components.minusOne.addAction(Actions.sequence(
                 Actions.fadeIn(0.075f),
@@ -435,5 +476,13 @@ public class GameScreen extends InputAdapter implements Screen {
         Components.MainMusic.dispose();
         components.disposeElements();
         snake.dispose();
+        red.dispose();
+        blue.dispose();
+        yellow.dispose();
+        pink.dispose();
+        MainGame.yellow_1.dispose();
+        MainGame.pink_1.dispose();
+        MainGame.red_1.dispose();
+        MainGame.blue_1.dispose();
     }
 }
