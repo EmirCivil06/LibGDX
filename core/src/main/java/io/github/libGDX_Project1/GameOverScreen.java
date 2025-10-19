@@ -23,6 +23,7 @@ public class GameOverScreen extends InputAdapter implements Screen {
     protected BitmapFont font_1;
     protected GlyphLayout layout_1 = new GlyphLayout();
     protected GlyphLayout layout_2 = new GlyphLayout();
+    protected GlyphLayout layout_3 = new GlyphLayout();
     private Stage stage;
 
     public GameOverScreen(Main game){
@@ -82,16 +83,18 @@ public class GameOverScreen extends InputAdapter implements Screen {
         MainGame.background.draw(MainGame.batch);
         layout_1.setText(font_1, "GAME OVER");
         layout_2.setText(MainGame.pixeloid, "Gelecek sefere bol şans!");
+        layout_3.setText(MainGame.pixeloid, "Yeniden denemek için ESC'e basın.");
         float x_1 = (MainGame.viewport.getWorldWidth() - layout_1.width) / 2;
         float x_2 = (MainGame.viewport.getWorldWidth() - layout_2.width) / 2;
+        float x_3 = (MainGame.viewport.getWorldWidth() - layout_3.width) / 2;
 
         font_1.draw(MainGame.batch, "GAME OVER", x_1, 220);
         MainGame.pixeloid.draw(MainGame.batch, "Gelecek sefere bol şans!", x_2, 110);
-        MainGame.pixeloid.draw(MainGame.batch, "Çıkmak için ESC'e basın.", x_2,  90);
+        MainGame.pixeloid.draw(MainGame.batch, "Yeniden denemek için ESC'e basın.", x_3,  90);
         MainGame.batch.end();
 
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-            Gdx.app.exit();
+            MainGame.setScreen(new MainMenuScreen(MainGame));
         }
         stage.act(delta);
         stage.draw();
